@@ -1,0 +1,1215 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Slicing  -->
+    <div class="row p-4 section-form-program">
+     <div class="col-3">
+     <!-- card  -->
+         <!-- <div class="card">
+             <div class="card-body">
+                 <h4 class="card-title p-0 m-0 mb-1">Daftar Form</h4>
+                 <hr class="m-0 mb-3">
+                 <div class="list-button"><button
+                     type="button"
+                     class="btn-wizard"
+                     *ngFor="let step of wizardSteps; let i = index"
+                     [class.btn-active]="currentWizardStep === i + 1"
+                     (click)="goToStep(i + 1)"
+                    >
+                        {{ step.title }}
+                        <i class="fas fa-chevron-right"></i>
+                    </button>                 
+                     <button type="button" class="button-action btn-draft" ><i class="fas fa-save"></i>Draft</button>
+                     <button class="button-action btn-back" type="button"><i class="fas fa-chevron-left"></i>Kembali</button>
+                 </div>
+             </div>                        
+         </div> -->
+         <!-- <div class="card">
+            <div class="card-body">
+              <h4 class="card-title p-0 m-0 mb-1">Daftar Form</h4>
+              <hr class="m-0 mb-3">
+              <div class="list-button">
+                <button
+                  type="button"
+                  class="btn-wizard"
+                  *ngFor="let step of wizardSteps; let i = index"
+                  [class.btn-active]="currentWizardStep === i + 1"
+                  [class.btn-invalid]="isStepInvalid(i)"
+                  (click)="goToStep(i + 1)"
+                >
+                  {{ step.title }}
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+                <button type="button" class="button-action btn-draft">
+                  <i class="fas fa-save"></i>Draft
+                </button>
+                <button class="button-action btn-back" type="button">
+                  <i class="fas fa-chevron-left"></i>Kembali
+                </button>
+              </div>
+            </div>
+          </div> -->
+          
+          <!-- <div class="card">
+            <div class="card-body">
+              <h4 class="card-title p-0 m-0 mb-1">Daftar Form</h4>
+              <hr class="m-0 mb-3">
+              <div class="list-button">
+                <button
+      *ngFor="let step of wizardSteps"
+      type="button"
+      class="btn-wizard"
+      [class.btn-active]="currentWizardStep === step.id"
+      [class.btn-invalid]="isStepInvalid(step.id)"
+      (click)="goToStep(step.id)"
+    >
+      {{ step.title }}
+      <i class="fas fa-chevron-right"></i>
+    </button>
+          
+                <button type="button" class="button-action btn-draft"><i class="fas fa-save"></i>Draft</button>
+                <button type="button" class="button-action btn-back" (click)="previousStep()"><i class="fas fa-chevron-left"></i>Kembali</button>
+                <button type="button" class="button-action btn-next" (click)="nextStep()"><i class="fas fa-chevron-right"></i>Next</button>
+              </div>
+            </div>
+          </div> -->
+          
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title p-0 m-0 mb-1">Daftar Form</h4>
+              <hr class="m-0 mb-3">
+              <div class="list-button">
+                <button
+                  *ngFor="let step of wizardSteps"
+                  type="button"
+                  class="btn-wizard"
+                  [class.btn-active]="currentWizardStep === step.id"
+                  [class.btn-invalid]="invalidSteps[step.id - 1]"
+                  (click)="goToStep(step.id)">
+                  {{ step.title }}
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <button type="button" class="button-action btn-draft"><i class="fas fa-save"></i> Draft</button>
+                <button class="button-action btn-back" type="button" (click)="previousStep()"><i class="fas fa-chevron-left"></i> Kembali</button>
+                <button class="button-action btn-next" type="button" (click)="nextStep()"><i class="fas fa-chevron-right"></i> Selanjutnya</button>
+              </div>
+            </div>
+          </div>
+          
+          
+     </div>
+     <div class="col-9 mt-2 right-side-wizard">
+         <div class="item-wizard" *ngIf="currentWizardStep === 1">
+             <div>
+                 <h2 class="card-title p-0 m-0 mb-2 header-title-wizard">Program Pelatihan</h2>
+                 <!-- Form  -->
+             </div>
+             <hr class="mb-4">
+            <div *ngIf="(user$ | async) as user">
+                <div *ngIf="user.hasRole(Role.Admin)">
+                    <div class="mb-2">
+                        <div class="row text-black pb-0">
+                            <div class="col-md-4 align-items-center d-flex">
+                            <label [for]="fieldId">Tipe Publikasi</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div>
+                                    <label class="mr-4">
+                                    <input type="radio" formControlName="tipe_publikasi" value="private" /> Privat
+                                    </label>
+                                    <label class="mr-4">
+                                    <input type="radio" formControlName="tipe_publikasi" value="public" /> Publik
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div *ngIf="form.get('tipe_publikasi')?.touched && form.get('tipe_publikasi')?.errors?.required" class="invalid-feedback">
+                            <small>Metode Pelatihan wajib dipilih</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="(user$ | async) as user">
+                <div *ngIf="!user.hasRole(Role.Admin)">
+                    <div class="mb-2">
+                        <div class="row text-black pb-0">
+                            <div class="col-md-4 align-items-center d-flex">
+                            <label [for]="fieldId">Tipe Publikasi</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div>
+                                    <label class="mr-4">
+                                    <input type="radio" formControlName="tipe_publikasi" value="private" /> Private
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div *ngIf="form.get('tipe_publikasi')?.touched && form.get('tipe_publikasi')?.errors?.required" class="invalid-feedback">
+                            <small>Metode Pelatihan wajib dipilih</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="versi"
+                label="Versi Dalam JP"
+                placeholder="Masukkan Versi"
+                [isDisabled]="isEditMode? false : true"
+                [errorMessages]="{
+                required: 'Versi wajib diisi.',
+                pattern: 'Versi harus berupa angka.'
+                }"
+            ></kemnaker-input-v2>
+            <div class="row text-black" *ngIf="form.value.tipe_publikasi == 'private'">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Balai / Lembaga</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(institutionsLembaga$ | async)?.data"
+                        [control]="f.lembaga"
+                        [defaultItem]="{'code':'0000','name': 'Pilih Lembaga'}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [itemTemplate]="customItemTemplate"
+                        [valueTemplate]="customValueTemplate"
+                        [errorMessages]="{
+                        required: 'Kode KBJI harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>
+                    <ng-template #customItemTemplate let-dataItem>
+                        {{ dataItem.code }} - {{ dataItem.name }}
+                    </ng-template>
+
+                    <!-- Template untuk nilai yang dipilih -->
+                    <ng-template #customValueTemplate let-dataItem>
+                        {{ dataItem?.code }} - {{ dataItem?.name }}
+                    </ng-template>           
+                </div>
+            </div>
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">KBJI</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(kbjiDigitFour$ | async)?.data"
+                        [control]="f.kbji"
+                        [defaultItem]="{'code':'0000','name': 'Pilih Kode KBJI'}"
+                        [textField]="'combinedText'"
+                        combineText="true"
+                        [valueField]="'id'"
+                        [itemTemplate]="customItemTemplate"
+                        [valueTemplate]="customValueTemplate"
+                        [errorMessages]="{
+                        required: 'Kode KBJI harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>  
+                    <!-- Template untuk item -->
+                    <ng-template #customItemTemplate let-dataItem>
+                        {{ dataItem.code }} - {{ dataItem.name }}
+                    </ng-template>
+
+                    <!-- Template untuk nilai yang dipilih -->
+                    <ng-template #customValueTemplate let-dataItem>
+                        {{ dataItem?.code }} - {{ dataItem?.name }}
+                    </ng-template> 
+                </div>
+            </div>
+             <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">KBLI</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(kbliDigitFour$ | async)?.data"
+                        [control]="f.kbli"
+                        [defaultItem]="{'code':'0000','name': 'Pilih Kode KBLI'}"
+                        [textField]="'combinedText'"
+                        combineText="true"
+                        [valueField]="'id'"
+                        [itemTemplate]="customItemTemplate"
+                        [valueTemplate]="customValueTemplate"
+                        [errorMessages]="{
+                        required: 'Kode KBLI harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>  
+                    <ng-template #customItemTemplate let-dataItem>
+                        {{ dataItem.code }} - {{ dataItem.name }}
+                    </ng-template>
+
+                    <!-- Template untuk nilai yang dipilih -->
+                    <ng-template #customValueTemplate let-dataItem>
+                        {{ dataItem?.code }} - {{ dataItem?.name }}
+                    </ng-template>              
+                </div>
+            </div>
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Kejuruan</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(vocationals$ | async)?.data"
+                        [control]="f.kejuruan"
+                        [defaultItem]="{name: 'Pilih Kejuruan', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Kejuruan harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'kejuruan')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+             <div class="row text-black" *ngIf="form.value.kejuruan">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Bidang Keahlian</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(subVocationals$ | async)"
+                        [control]="f.bidang_keahlian"
+                        [defaultItem]="{name: 'Pilih Bidang Keahlian', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Bidang Keahlian harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="tahunTerbit"
+                label="Tahun Terbit"
+                placeholder="Masukkan Tahun Terbit"
+                [errorMessages]="{
+                required: 'Tahun Terbit wajib diisi.',
+                pattern: 'Tahun Terbit harus berupa angka dan 4 Digit.'
+                }"
+            ></kemnaker-input-v2>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="nama_program_pelatihan"
+                label="Nama Program Pelatihan"
+                placeholder="Masukkan Nama Program"
+                [errorMessages]="{
+                required: 'Nama Program wajib diisi.'
+                }"
+            ></kemnaker-input-v2>
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Jenis Program</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="jenis_program_list"
+                        [control]="f.jenis_program"
+                        [defaultItem]="{name: 'Pilih Jenis Program', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Jenis Program harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'jenis_program')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <div class="row text-black" *ngIf="form.value.jenis_program?.id == 'kkni' || form.value.jenis_program?.id == 'klaster'">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Tipe Okupasi</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="tipe_okupasi_list"
+                        [control]="f.tipe_okupasi"
+                        [defaultItem]="{name: 'Pilih Tipe Okupasi', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Tipe Okupasi harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'tipe_okupasi')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div> 
+            <div class="row text-black" *ngIf="level_jenjang_list || form.value.jenis_program == 'unit_kompetensi'">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Jenjang</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="level_jenjang_list"
+                        [control]="f.jenjang"
+                        [defaultItem]="{name: 'Pilih Level Jenjang', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Kode KBJI harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'jenjang')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="row text-black pb-0">
+                    <div class="col-md-4 align-items-center d-flex">
+                      <label [for]="fieldId">Metode pelatihan</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div>
+                            <label class="mr-4">
+                            <input type="radio" formControlName="metode_pelatihan" value="online" /> Online
+                            </label>
+                            <label class="mr-4">
+                            <input type="radio" formControlName="metode_pelatihan" value="offline" /> Oflline
+                            </label>
+                            <label class="mr-4">
+                            <input type="radio" formControlName="metode_pelatihan" value="blended" /> Blended
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div *ngIf="form.get('metode_pelatihan')?.touched && form.get('metode_pelatihan')?.errors?.required" class="invalid-feedback">
+                    <small>Metode Pelatihan wajib dipilih</small>
+                </div>
+            </div>
+            <kemnaker-textarea-v2
+                [formGroup]="form"
+                formControlName="deskripsi_pelatihan"
+                label="Deskripsi"
+                placeholder="Masukkan deskripsi..."
+                rows="5"
+                [errorMessages]="{
+                required: 'Deskripsi wajib diisi.',
+                minlength: 'Deskripsi minimal 10 karakter.',
+                maxlength: 'Deskripsi maksimal 200 karakter.'
+                }"
+            ></kemnaker-textarea-v2>
+            <kemnaker-textarea-v2
+                [formGroup]="form"
+                formControlName="tujuan_program"
+                label="Tujuan Program"
+                placeholder="Masukkan deskripsi..."
+                rows="5"
+                [errorMessages]="{
+                required: 'Tujuan Program wajib diisi.',
+                minlength: 'Tujuan Program minimal 10 karakter.',
+                maxlength: 'Tujuan Program maksimal 200 karakter.'
+                }"
+            ></kemnaker-textarea-v2>
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Skema Sertifikasi</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(bnsp$ | async)?.data"
+                        [control]="f.skema_sertifikasi"
+                        [defaultItem]="{name: 'Pilih Skema Sertifikasi', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Skema Sertifikasi harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <div class="row text-black">
+                <div class="col-md-4 d-flex mt-3">
+                    <label for="exampleInputEmail1">Tags</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <app-kendo-dropdown-skill
+                        *ngIf="(tags$ | async)?.data; else loading"
+                        [data]="(tags$ | async)?.data"
+                        label="Tags"
+                        textField="name"
+                        [valueField]="'id'"
+                        [control]="form.get('tags')" 
+                        [placeholder]="'Pilih Tags'"
+                        [errorMessages]="{ required: 'Tags wajib dipilih' }"
+                        [submitted]="isSubmitted"
+                        [defaultItem]="{ name: 'Pilih Tags', id:null}"
+                        (valueChange)="onSkillChange($event)"
+                        ></app-kendo-dropdown-skill>    
+                </div>
+            </div>
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Kategori Program</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(categoryProgramList$ | async)?.data"
+                        [control]="f.kategori_program"
+                        [defaultItem]="{name: 'Pilih Kategori Program', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        placeholder="Pilih Kode KBJIKUUu"
+                        [errorMessages]="{
+                        required: 'Kode KBJI harus dipilih.',
+                        minlength: 'Kode KBJI terlalu pendek.',
+                        maxlength: 'Kode KBJI terlalu panjang.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'kategori_program')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <div class="row text-black" *ngIf="form.value.kategori_program?.name == 'TKM'">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Type TKM</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="types_tkm"
+                        [control]="f.type_tkm"
+                        [defaultItem]="{name: 'Pilih Type TKM', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Type TKM harus dipilih.',
+                        minlength: 'Type TKM terlalu pendek.',
+                        maxlength: 'Type TKM terlalu panjang.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <ng-container  *ngIf="form.value.kategori_program?.name == 'JKP'">
+                <div class="row text-black">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <label for="jkp_harga">Harga</label>
+                    </div>
+                    <div class="col-md-8">
+                        <!-- form  -->
+                        <div class="form-group">
+                            <input
+                            id="jkp_harga"
+                            type="text"
+                            class="form-control"
+                            formControlName="jkp_harga"
+                            placeholder="Masukkan harga"
+                            (input)="formatRupiah($event)"
+                            />
+                            <div *ngIf="form.get('jkp_harga').hasError('required') && form.get('jkp_harga').touched" class="text-danger">
+                            Harga harus diisi
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <kemnaker-file-input
+                    [label]="'Dokumen RAB'"
+                    [fieldId]="'dokumen_rab'"
+                    [control]="f.dokumen_rab"
+                    [submitted]="submitted"
+                    [errorMessages]="{ required: 'File harus diunggah.' }"
+                    (fileChange)="onFileSelected($event)"
+                    maxWidth="1920"
+                    maxHeight="1920"
+                ></kemnaker-file-input>
+            </ng-container>
+             <kemnaker-file-input
+                [label]="'Gambar Program Pelatihan'"
+                [fieldId]="'gambarInput'"
+                [control]="f.gambar_pelatihan"
+                [submitted]="submitted"
+                [allowedTypes]="['image/png', 'image/jpeg', 'image/jpg']"
+                [errorMessages]="{ required: 'File harus diunggah.' }"
+                (fileChange)="onFileSelected($event)"
+                maxWidth="1920"
+                maxHeight="1920"
+            ></kemnaker-file-input>
+         </div>
+         <div class="item-wizard" *ngIf="currentWizardStep === 2">
+             <div>
+                 <h2 class="card-title p-0 m-0 mb-2 header-title-wizard">Persyaratan Instruktur</h2>
+                 <!-- Form  -->
+             </div>
+             <hr class="mb-4">
+             <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Pendidikan</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(educations$ | async)"
+                        [control]="f.pendidikan_instruktur"
+                        [defaultItem]="{name: 'Pilih Pendidikan', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Pendidikan harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="pengalaman_mengajar"
+                label="Pengalaman Kerja"
+                placeholder="Masukkan Pengalaman Kerja"
+                [errorMessages]="{
+                    required: 'Pengalaman Kerja wajib diisi.',
+                    pattern:'Harap masukkan angka yang valid (1-3 digit)'
+                }"
+            ></kemnaker-input-v2>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="kemampuan_metodologi"
+                label="Kemampuan Metodologi"
+                placeholder="Masukkan Kemampuan Metodologi"
+                [errorMessages]="{
+                required: 'Kemampuan Metodologi wajib diisi.'
+                }"
+            ></kemnaker-input-v2>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="kemampuan_teknis"
+                label="Kemampuan Teknis"
+                placeholder="Masukkan Kemampuan Teknis"
+                [errorMessages]="{
+                required: 'Kemampuan Teknis wajib diisi.'
+                }"
+            ></kemnaker-input-v2>
+            <kemnaker-textarea-v2
+                [formGroup]="form"
+                formControlName="persyaratan_khusus"
+                label="Persyaratan Khusus"
+                placeholder="Masukkan Persyaratan Khusus"
+                rows="5"
+                [errorMessages]="{
+                required: 'Persyaratan Khusus wajib diisi.',
+                minlength: 'Persyaratan Khusus minimal 10 karakter.',
+                maxlength: 'Persyaratan Khusus maksimal 200 karakter.'
+                }"
+            ></kemnaker-textarea-v2>
+         </div>
+         <div class="item-wizard" *ngIf="currentWizardStep === 3">
+             <div>
+                 <h2 class="card-title p-0 m-0 mb-2 header-title-wizard">Persyaratan Peserta</h2>
+                 <!-- Form  -->
+             </div>
+             <hr class="mb-4">
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Minimal Pendidikan</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(educations$ | async)"
+                        [control]="f.min_pendidikan"
+                        [defaultItem]="{name: 'Pilih Minimal Pendidikan', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Minimal Pendidikan harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <div class="row text-black">
+                <div class="col-md-4 align-items-center d-flex">
+                    <label for="exampleInputEmail1">Maksimal Pendidikan</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <kemnaker-kendo-dropdown
+                        [data]="(educations$ | async)"
+                        [control]="f.max_pendidikan"
+                        [defaultItem]="{name: 'Pilih Maksimal Pendidikan', id: null}"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [errorMessages]="{
+                        required: 'Maksimal Pendidikan harus dipilih.'
+                        }"
+                        [submitted]="submitted"
+                        (valueChange)="onValueChange($event, 'digit1')">
+                    </kemnaker-kendo-dropdown>        
+                </div>
+            </div>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="pelatihan"
+                label="Pelatihan"
+                placeholder="Masukkan Pelatihan"
+                [errorMessages]="{
+                required: 'Pelatihan wajib diisi.'
+                }"
+            ></kemnaker-input-v2>
+            <kemnaker-input-v2
+                [formGroup]="form"
+                formControlName="pengalaman_kerja"
+                label="Pengalaman Kerja"
+                placeholder="Masukkan Pengalaman Kerja"
+                [errorMessages]="{
+                    required: 'Pengalaman Kerja wajib diisi.',
+                    pattern:'Harap masukkan angka yang valid (1-3 digit)'
+                }"
+            ></kemnaker-input-v2>  
+             <div class="row">
+                 <div class="col-4">
+                     <div class="form-group">
+                         <label for="instructor_work_experience">Rentang Usia</label>
+                     </div>                    
+                 </div>                    
+                 <div class="col-8">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="input-custom" placeholder="18 Tahun" disabled>
+                                </div>
+                                
+                            </div>   
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                    <input
+                                      id="maksimal_usia"
+                                      type="text"
+                                      class="form-control input-custom"
+                                      placeholder="Maksimal Usia"
+                                      formControlName="maksimal_usia"
+                                      [class.is-invalid]="form.get('maksimal_usia')?.invalid && (form.get('maksimal_usia')?.touched || form.get('maksimal_usia')?.dirty)">
+                                    
+                                    <!-- Error Messages -->
+                                    <div *ngIf="form.get('maksimal_usia')?.invalid && (form.get('maksimal_usia')?.touched || form.get('maksimal_usia')?.dirty)" class="invalid-feedback">
+                                      <small *ngIf="form.get('maksimal_usia')?.errors?.required">Maksimal usia wajib diisi</small>
+                                      <small *ngIf="form.get('maksimal_usia')?.errors?.pattern">Harap masukkan angka yang valid (1-3 digit)</small>
+                                      <small *ngIf="form.get('maksimal_usia')?.errors?.min">Harap masukkan umur lebih 18 Tahun</small>
+                                    </div>
+                            </div>   
+                        </div>
+                    </div>
+                                      
+                 </div>                    
+             </div>
+            <kemnaker-textarea-v2
+                [formGroup]="form"
+                formControlName="persyaratan_khusus_peserta"
+                label="Persyaratan Khusus"
+                placeholder="Masukkan Persyaratan Khusus"
+                rows="5"
+                [errorMessages]="{
+                required: 'Persyaratan Khusus wajib diisi.',
+                minlength: 'Persyaratan Khusus minimal 10 karakter.',
+                maxlength: 'Persyaratan Khusus maksimal 200 karakter.'
+                }"
+            ></kemnaker-textarea-v2>
+            <div class="row text-black pb-0">
+                <div class="col-md-4 align-items-center d-flex">
+                  <label [for]="fieldId">Jenis Kelamin</label>
+                </div>
+                <div class="col-md-8">
+                    <div>
+                        <label class="mr-4">
+                        <input type="radio" formControlName="jenis_kelamin" value="laki-laki" /> Laki Laki
+                        </label>
+                        <label class="mr-4">
+                        <input type="radio" formControlName="jenis_kelamin" value="perempuan" /> Perempuan
+                        </label>
+                    </div>
+                </div>
+            </div>
+         </div>
+         <div class="item-wizard" *ngIf="currentWizardStep === 4">
+             <div>
+                 <h2 class="card-title p-0 m-0 mb-2 header-title-wizard">Keterampilan</h2>
+                 <!-- Form  -->
+             </div>
+             <hr class="mb-4">
+            <div class="row text-black">
+                <div class="col-md-4 d-flex mt-3">
+                    <label for="exampleInputEmail1">Keahlian</label>
+                </div>
+                <div class="col-md-8">
+                    <!-- form  -->
+                    <app-kendo-dropdown-skill
+                        *ngIf="(skillList$ | async)?.data; else loading"
+                        [data]="(skillList$ | async)?.data"
+                        label="Keahlian"
+                        [textField]="'name'"
+                        [valueField]="'id'"
+                        [control]="form.get('keahlian2')" 
+                        [placeholder]="'Pilih Keahlian'"
+                        [errorMessages]="{ required: 'Keahlian wajib dipilih' }"
+                        [submitted]="isSubmitted"
+                        [defaultItem]="{ name: 'Pilih Keahlian'}"
+                        (valueChange)="onSkillChange($event)"
+                        ></app-kendo-dropdown-skill>    
+                </div>
+            </div>
+         </div>
+                   
+         <ng-container *ngIf="currentWizardStep === 5">
+          <div class="unit-kompetensi-header">
+            <h2 class="card-title p-0 m-0 mb-2 header-title-wizard">Unit Kompetensi</h2>
+          </div>
+          <hr class="mb-4" />
+    <!-- Form Tetap -->
+     
+    <!-- Elemen Biru -->  
+    <div [formGroup]="unitKompetensiForm" class="form-container">
+    
+    <!-- falonez  -->
+    
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Tipe Unit Kompetensi</label>
+            </div>                    
+        </div>                    
+        <div class="col-8">
+           <div class="form-group">
+               <div class="input-group">
+                   <kendo-dropdownlist
+                        class="kendo-dropdown"
+                        [defaultItem]="defaultItem"
+                        [data]="typeUnitKompetensi"
+                        [filterable]="true"
+                        textField="name"
+                        valueField="name"
+                        [value]="typeSelected"
+                        (valueChange)="onValueChange($event,'typeSelected')"
+                        (filterChange)="handleFilter($event,'typeSelected')"
+                        [valuePrimitive]="true"
+                        >
+                    </kendo-dropdownlist>
+               </div>
+               
+           </div>                
+        </div>                    
+    </div>
+   <div class="row"  *ngIf="typeSelected">
+       <div class="col-4">
+           <div class="form-group">
+               <label  *ngIf="typeSelected != 'SKKNI'">Kode Unit - Judul Unit</label>
+               <label  *ngIf="typeSelected == 'SKKNI'">Kode Unit SKKNI - Judul Unit SKKNI</label>
+           </div>                    
+       </div>                    
+       <div class="col-8">
+          <div class="form-group">
+              <div class="input-group">
+                  <kendo-dropdownlist
+                       class="kendo-dropdown mr-2"
+                       [defaultItem]="{'code': 'Pilih Kode Unit SKKNI - Judul Unit SKKNI', 'id': null}"
+                       [data]="(modules$ | async)?.data"
+                       [filterable]="true"
+                       textField="combinedText"
+                       valueField="id"
+                       [value]="selectedValue"
+                       (valueChange)="onValueChange($event, 'pilih_unitkompetensi')"
+                       (filterChange)="handleFilter($event, 'pilih_unitkompetensi')"
+                       [valuePrimitive]="true"
+                       formControlName="kode"
+                       >
+                       <ng-template kendoDropDownListItemTemplate let-dataItem>
+                        {{ dataItem.code }} - {{ dataItem.title }} 
+                        </ng-template>
+                    
+                        <ng-template kendoDropDownListValueTemplate let-dataItem>
+                            {{ dataItem?.code }} - {{ dataItem?.title }} 
+                        </ng-template>
+                   </kendo-dropdownlist>
+              </div>
+              
+          </div>                
+       </div>                    
+   </div>
+    <div class="row" *ngIf="typeSelected == 'SKKNI'">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Judul SKKNI</label>
+            </div>                    
+        </div>                    
+        <div class="col-8">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="input-custom" placeholder="Masukan Judul SKKNI" formControlName="judul">
+                </div>
+                
+            </div>                    
+        </div>                    
+    </div>
+   <div class="row">
+       <div class="col-4">
+           <div class="form-group">
+               <label>Materi Pembelajaran</label>
+           </div>                    
+       </div>                    
+       <div class="col-8">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="input-custom" placeholder="Masukan Materi" formControlName="materi">
+            </div>
+            
+        </div>                    
+    </div>           
+   </div>
+    <kemnaker-input-v2
+        [formGroup]="unitKompetensiForm"
+        formControlName="durasi"
+        label="Durasi JP"
+        placeholder="Masukkan Durasi JP"
+        [errorMessages]="{
+            required: 'Durasi JP wajib diisi.',
+            pattern: 'Durasi JP wajib angka.'
+        }"
+    ></kemnaker-input-v2> 
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Deskripsi</label>
+            </div>                    
+        </div>                    
+        <div class="col-8">
+            <div class="form-group">
+                <textarea name="deskripsi_pelatihan" id="" placeholder="Masukan Deskripsi" class="input-custom-textarea" formControlName="deskripsi"></textarea>
+            </div>                    
+        </div>                    
+    </div>
+    <div class="row">
+       <div class="col-4">
+           <div class="form-group">
+               <label>Referensi</label>
+           </div>                    
+       </div>                    
+       <div class="col-8">
+           <div class="form-group">
+               <textarea name="deskripsi_pelatihan" id="" placeholder="Masukan Referensi" class="input-custom-textarea" formControlName="referensi"></textarea>
+           </div>                    
+       </div>                    
+   </div>
+     
+    <button class="btn btn-primary" type="button" [disabled]="unitKompetensiForm.invalid" (click)="tambahData()" >
+      Tambah Data
+    </button>
+    </div>
+  
+  <!-- Hide/Unhide Button -->
+  <div>
+    <button class="btn btn-secondary mb-3" (click)="toggleVisibility()">
+      {{ isHidden ? 'Tampilkan Daftar Data' : 'Sembunyikan Daftar Data' }}
+    </button>
+  </div>
+  
+  <!-- Daftar Data Sementara -->
+    <!-- <ng-container *ngIf="!isHidden">
+        <div *ngFor="let data of dataSementara; let i = index">
+            <div class="mb-2">
+            <div class="blue-section">
+                <span>{{ data.tipe }} - {{ data.code }} - {{ data.judul }}</span>
+                <div class="d-flex justify-content-between align-items-center">
+                <div class="chevron-btn mr-4">
+                    <i
+                    class="fas"
+                    [ngClass]="data.isVisible ? 'fa-chevron-up' : 'fa-chevron-down'"
+                    (click)="toggleVisibilityChenron(i)"
+                    ></i>
+                </div>
+                <button class="delete-button btn btn-danger" (click)="hapusData(i)">Hapus</button>
+                </div>
+            </div>
+        
+            <div *ngIf="data.isVisible" class="form-sectionku">
+                <form (ngSubmit)="onSubmit()">
+                <div>
+                    <label for="tipeUnit">Tipe Unit Kompetensi</label>
+                    <input type="text" id="judulSKKNI" [value]="data.tipe" disabled name="judulSKKNI" class="inputku" />
+                </div>
+                <div>
+                    <label for="judulSKKNI">Kode Unit SKKNI - Judul Unit SKKNI</label>
+                    <input type="text" id="judulSKKNI" [value]="data.code+ ' - '+ data.judul" disabled name="judulSKKNI" class="inputku" />
+                </div>
+        
+                <div>
+                    <label for="judulSKKNI">Judul SKKNI</label>
+                    <input type="text" id="judulSKKNI" [value]="data.judul" disabled name="judulSKKNI" class="inputku" />
+                </div>
+        
+                <div>
+                    <label for="materi">Materi Pembelajaran</label>
+                    <input type="text" id="judulSKKNI" [value]="data.materi" disabled name="judulSKKNI" class="inputku" />
+                </div>
+        
+                <div>
+                    <label for="durasi">Durasi Dalam JP</label>
+                    <input type="number" id="durasi" [value]="data.durasi" disabled name="durasi" class="inputku" />
+                </div>
+        
+                <div>
+                    <label for="deskripsi">Deskripsi</label>
+                    <textarea id="deskripsi" [value]="data.deskripsi" disabled name="deskripsi" class="textareaku"></textarea>
+                </div>
+        
+                <div>
+                    <label for="referensi">Referensi</label>
+                    <textarea id="referensi" [value]="data.referensi" disabled name="referensi" class="textareaku"></textarea>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </ng-container>       -->
+        
+    <!-- <ng-container *ngIf="!isHidden">
+        <div formArrayName="dataSementara">
+          <div *ngFor="let data of form.get('dataSementara').controls; let i = index" [formGroupName]="i">
+            <div class="mb-2">
+              <div class="blue-section">
+                <span>{{ data.value.tipe }} - {{ data.value.code }} - {{ data.value.judul }}</span>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="chevron-btn mr-4">
+                    <i
+                      class="fas"
+                      [ngClass]="data.value.isVisible ? 'fa-chevron-up' : 'fa-chevron-down'"
+                      (click)="toggleVisibilityChenron(i)"
+                    ></i>
+                  </div>
+                  <button class="delete-button btn btn-danger" (click)="hapusData(i)">Hapus</button>
+                </div>
+              </div>
+      
+              <div *ngIf="data.value.isVisible" class="form-sectionku">
+                <form (ngSubmit)="onSubmit()">
+                  <div>
+                    <label for="tipeUnit">Tipe Unit Kompetensi</label>
+                    <input
+                      type="text"
+                      id="tipeUnit"
+                      [formControlName]="'tipe'"
+                      class="inputku"
+                      [value]="data.value.tipe"
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label for="judulSKKNI">Kode Unit SKKNI - Judul Unit SKKNI</label>
+                    <input
+                      type="text"
+                      id="judulSKKNI"
+                      [formControlName]="'code'"
+                      class="inputku"
+                      [value]="data.value.code + ' - ' + data.value.judul"
+                      disabled
+                    />
+                  </div>
+      
+                  <div>
+                    <label for="judulSKKNI">Judul SKKNI</label>
+                    <input
+                      type="text"
+                      id="judulSKKNI"
+                      [formControlName]="'judul'"
+                      class="inputku"
+                      [value]="data.value.judul"
+                      disabled
+                    />
+                  </div>
+      
+                  <div>
+                    <label for="materi">Materi Pembelajaran</label>
+                    <input
+                      type="text"
+                      id="materi"
+                      [formControlName]="'materi'"
+                      class="inputku"
+                      [value]="data.value.materi"
+                      disabled
+                    />
+                  </div>
+      
+                  <div>
+                    <label for="durasi">Durasi Dalam JP</label>
+                    <input
+                      type="number"
+                      id="durasi"
+                      [formControlName]="'durasi'"
+                      class="inputku"
+                      [value]="data.value.durasi"
+                      disabled
+                    />
+                  </div>
+      
+                  <div>
+                    <label for="deskripsi">Deskripsi</label>
+                    <textarea
+                      id="deskripsi"
+                      [formControlName]="'deskripsi'"
+                      class="textareaku"
+                      [value]="data.value.deskripsi"
+                      disabled
+                    ></textarea>
+                  </div>
+      
+                  <div>
+                    <label for="referensi">Referensi</label>
+                    <textarea
+                      id="referensi"
+                      [formControlName]="'referensi'"
+                      class="textareaku"
+                      [value]="data.value.referensi"
+                      disabled
+                    ></textarea>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container> -->
+      
+      <ng-container *ngIf="!isHidden">
+        <div *ngFor="let data of form.get('dataSementara').value; let i = index">
+          <div class="mb-2">
+            <div class="blue-section">
+              <span>{{ data.tipe }} - {{ data.code }} - {{ data.judul }}</span>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="chevron-btn mr-4">
+                  <i
+                    class="fas"
+                    [ngClass]="data.isVisible ? 'fa-chevron-up' : 'fa-chevron-down'"
+                    (click)="toggleVisibilityChenron(i)">
+                  </i>
+                </div>
+                <button class="delete-button btn btn-danger" (click)="hapusData(i)">Hapus</button>
+              </div>
+            </div>
+          
+            <div *ngIf="form.get('dataSementara').at(i).get('isVisible').value" class="form-sectionku">
+              <form (ngSubmit)="onSubmit()">
+                <div>
+                  <label for="tipeUnit">Tipe Unit Kompetensi</label>
+                  <input type="text" id="judulSKKNI" [value]="data.tipe" disabled name="judulSKKNI" class="inputku" />
+                </div>
+                <div>
+                  <label for="judulSKKNI">Kode Unit SKKNI - Judul Unit SKKNI</label>
+                  <input type="text" id="judulSKKNI" [value]="data.code + ' - ' + data.judul" disabled name="judulSKKNI" class="inputku" />
+                </div>
+                <div>
+                  <label for="judulSKKNI">Judul SKKNI</label>
+                  <input type="text" id="judulSKKNI" [value]="data.judul" disabled name="judulSKKNI" class="inputku" />
+                </div>
+                <div>
+                  <label for="materi">Materi Pembelajaran</label>
+                  <input type="text" id="judulSKKNI" [value]="data.materi" disabled name="judulSKKNI" class="inputku" />
+                </div>
+                <div>
+                  <label for="durasi">Durasi Dalam JP</label>
+                  <input type="number" id="durasi" [value]="data.durasi" disabled name="durasi" class="inputku" />
+                </div>
+                <div>
+                  <label for="deskripsi">Deskripsi</label>
+                  <textarea id="deskripsi" [value]="data.deskripsi" disabled name="deskripsi" class="textareaku"></textarea>
+                </div>
+                <div>
+                  <label for="referensi">Referensi</label>
+                  <textarea id="referensi" [value]="data.referensi" disabled name="referensi" class="textareaku"></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      
+        </ng-container>
+         
+         <!-- KODEFIKASI  -->
+          
+         <div class="item-wizard" *ngIf="currentWizardStep === 6">
+            <div class="unit-kompetensi-header">
+                <h2 class="card-title p-0 m-0 mb-2 header-title-wizard">Kodefikasi</h2>
+              </div>
+              
+              <hr class="mb-4">
+              <div class="row">
+                <div class="col-md-12">
+                    <kemnaker-input
+                    label="Kodefikasi"
+                    placeholder="Kodefikasi"
+                    [control]="f.kodefikasi"
+                    [submitted]="submitted"
+                    [errorMessages]="{
+                        required: 'Kodefikasi harus diisi.',
+                        minlength: 'Kodefikasi harus terdiri dari minimal 3 karakter.',
+                        maxlength: 'Kodefikasi tidak boleh lebih dari 50 karakter.'
+                    }"
+                    fieldId="roleName"
+                ></kemnaker-input>  
+                </div>
+              </div>
+                <kemnaker-file-input
+                    [label]="'Dokumen Program'"
+                    [fieldId]="'gambarInput'"
+                    [control]="f.dokumen_program"
+                    [submitted]="submitted"
+                    [allowedTypes]="['application/pdf']"
+                    [errorMessages]="{ required: 'File harus diunggah.' }"
+                    (fileChange)="onFileSelected($event)"
+                ></kemnaker-file-input>
+              </div>
+         <!-- KODEFIKASI  -->
+         <!-- button next and previous with title -->
+         <div class="row mt-3">
+             <div class="col-12">
+                 <div class="d-flex justify-content-end">
+                     <button class="btn btn-previous mr-2" type="button" (click)="previousStep()" *ngIf="currentWizardStep !== 1">
+                         <span *ngIf="currentWizardStep > 1">
+                             <i class="fas fa-chevron-left"></i> {{ wizardSteps[currentWizardStep - 2]?.title }}
+                         </span>
+                     </button>
+                     <button class="btn btn-next" type="button" (click)="nextStep()" *ngIf="currentWizardStep !== wizardSteps.length">
+                         <span *ngIf="currentWizardStep < wizardSteps.length">
+                             {{ wizardSteps[currentWizardStep]?.title }}<i class="fas fa-chevron-right"></i>
+                         </span>
+                     </button>
+                     <button class="btn btn-next" type="button" (click)="onSubmit()" *ngIf="currentWizardStep == wizardSteps.length">
+                        <span *ngIf="currentWizardStep == wizardSteps.length">
+                            <i class="fas fa-save"></i>{{isEditMode? 'Ubah':'Simpan'}}
+                        </span>
+                    </button>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+</form>
